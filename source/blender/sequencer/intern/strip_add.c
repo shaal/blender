@@ -143,7 +143,7 @@ Sequence *SEQ_add_scene_strip(Scene *scene, ListBase *seqbase, struct SeqLoadDat
   seq->blend_mode = SEQ_TYPE_CROSS;
   seq->scene = load_data->scene;
   seq->len = load_data->scene->r.efra - load_data->scene->r.sfra + 1;
-  seq->playback_rate = 1.0f;
+  seq->playback_rate = 0.0f;
   id_us_ensure_real((ID *)load_data->scene);
   seq_add_set_name(seq, load_data);
   seq_add_generic_update(scene, seqbase, seq);
@@ -165,7 +165,7 @@ Sequence *SEQ_add_movieclip_strip(Scene *scene, ListBase *seqbase, struct SeqLoa
   seq->blend_mode = SEQ_TYPE_CROSS;
   seq->clip = load_data->clip;
   seq->len = BKE_movieclip_get_duration(load_data->clip);
-  seq->playback_rate = 1.0f;
+  seq->playback_rate = 0.0f;
   id_us_ensure_real((ID *)load_data->clip);
   seq_add_set_name(seq, load_data);
   seq_add_generic_update(scene, seqbase, seq);
@@ -187,7 +187,7 @@ Sequence *SEQ_add_mask_strip(Scene *scene, ListBase *seqbase, struct SeqLoadData
   seq->blend_mode = SEQ_TYPE_CROSS;
   seq->mask = load_data->mask;
   seq->len = BKE_mask_get_duration(load_data->mask);
-  seq->playback_rate = 1.0f;
+  seq->playback_rate = 0.0f;
   id_us_ensure_real((ID *)load_data->mask);
   seq_add_set_name(seq, load_data);
   seq_add_generic_update(scene, seqbase, seq);
@@ -213,7 +213,7 @@ Sequence *SEQ_add_effect_strip(Scene *scene, ListBase *seqbase, struct SeqLoadDa
   seq->seq1 = load_data->effect.seq1;
   seq->seq2 = load_data->effect.seq2;
   seq->seq3 = load_data->effect.seq3;
-  seq->playback_rate = 1.0f;
+  seq->playback_rate = 0.0f;
 
   if (seq->type == SEQ_TYPE_COLOR) {
     seq->blend_mode = SEQ_TYPE_CROSS;
@@ -314,7 +314,7 @@ Sequence *SEQ_add_image_strip(Main *bmain, Scene *scene, ListBase *seqbase, SeqL
       seqbase, load_data->start_frame, load_data->channel, SEQ_TYPE_IMAGE);
   seq->blend_mode = SEQ_TYPE_CROSS; /* so alpha adjustment fade to the strip below */
   seq->len = load_data->image.len;
-  seq->playback_rate = 1.0f;
+  seq->playback_rate = 0.0f;
   Strip *strip = seq->strip;
   strip->stripdata = MEM_callocN(load_data->image.len * sizeof(StripElem), "stripelem");
 
@@ -387,6 +387,7 @@ Sequence *SEQ_add_sound_strip(Main *bmain, Scene *scene, ListBase *seqbase, SeqL
       seqbase, load_data->start_frame, load_data->channel, SEQ_TYPE_SOUND_RAM);
   seq->sound = sound;
   seq->scene_sound = NULL;
+  seq->playback_rate = 0.0f;
 
   /* We add a very small negative offset here, because
    * ceil(132.0) == 133.0, not nice with videos, see T47135. */
@@ -444,6 +445,7 @@ Sequence *SEQ_add_meta_strip(Scene *scene, ListBase *seqbase, SeqLoadData *load_
 
   /* Set name. */
   seq_add_set_name(seqm, load_data);
+  seqm->playback_rate = 0.0f;
 
   /* Set frames start and length. */
   seqm->start = load_data->start_frame;

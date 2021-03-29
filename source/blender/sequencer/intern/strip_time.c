@@ -46,7 +46,12 @@
 static float seq_time_playback_rate_factor_get(const Scene *scene, const Sequence *seq)
 {
   float scene_playback_rate = (float)scene->r.frs_sec / scene->r.frs_sec_base;
-  return seq->playback_rate / scene_playback_rate;
+  if (seq->playback_rate != 0.0f) {
+    return seq->playback_rate / scene_playback_rate;  
+  }
+  else {
+    return 1;
+  }
 }
 
 float seq_give_frame_index(const Scene *scene, Sequence *seq, float timeline_frame)
